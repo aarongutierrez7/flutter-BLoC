@@ -5,18 +5,16 @@ import '../LoginLogic.dart';
 import './bloc.dart';
 import 'login_bloc_state.dart';
 
-class LoginBlocBloc extends Bloc<LoginBlocEvent, LoginBlocState> {
+class LoginBloc extends Bloc<LoginBlocEvent, LoginBlocState> {
   final LoginLogic logic;
 
-  LoginBlocBloc({@required this.logic});
+  LoginBloc({@required this.logic}) : super(null);
 
   @override
   LoginBlocState get initialState => InitialLoginBlocState();
 
   @override
-  Stream<LoginBlocState> mapEventToState(
-    LoginBlocEvent event,
-  ) async* {
+  Stream<LoginBlocState> mapEventToState(LoginBlocEvent event) async* {
     if (event is DoLoginEvent) {
       yield* _doLogin(event);
     }
@@ -29,7 +27,7 @@ class LoginBlocBloc extends Bloc<LoginBlocEvent, LoginBlocState> {
       var token = await logic.login(event.email, event.password);
       yield LoggedInBlocState(token);
     } on LoginException {
-      yield ErrorBlocState("No se pudo loggear");
+      yield ErrorBlocState("Error en el login");
     }
   }
 }

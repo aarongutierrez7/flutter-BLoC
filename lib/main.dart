@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: BlocProvider(
-        builder: (_) => LoginBlocBloc(
+        create: (_) => LoginBloc(
           logic: SimpleLoginLogic(),
         ),
         child: MyHomePage(title: 'Flutter Demo Home Page'),
@@ -28,7 +28,7 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("Lo Logramos!"),
+        child: Text("Login correcto!"),
       ),
     );
   }
@@ -59,22 +59,21 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login Demoi"),
+        title: Text("Login Demo"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: BlocListener<LoginBlocBloc, LoginBlocState>(
+        child: BlocListener<LoginBloc, LoginBlocState>(
           listener: (context, state) {
             if (state is ErrorBlocState) {
               _showError(context, state.message);
             }
             if (state is LoggedInBlocState) {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (BuildContext context) => MainPage())
-              );
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => MainPage()));
             }
           },
-          child: BlocBuilder<LoginBlocBloc, LoginBlocState>(
+          child: BlocBuilder<LoginBloc, LoginBlocState>(
             builder: (context, state) {
               return Form(
                 child: Column(
@@ -94,10 +93,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: CircularProgressIndicator(),
                       )
                     else
-                      RaisedButton(
-                        child: Text("Login"),
-                        onPressed: _doLogin,
-                      )
+                      Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: ElevatedButton(
+                            child: Text("Login"),
+                            onPressed: _doLogin,
+                          ))
                   ],
                 ),
               );
@@ -109,13 +110,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _doLogin() {
-    BlocProvider.of<LoginBlocBloc>(context).add(
+    BlocProvider.of<LoginBloc>(context).add(
       DoLoginEvent(emailController.text, passwordController.text),
     );
   }
 
   void _showError(BuildContext context, String message) {
-    Scaffold.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
     ));
   }

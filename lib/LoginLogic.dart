@@ -1,4 +1,3 @@
-
 abstract class LoginLogic {
   Future<String> login(String email, String password);
   Future<String> logout();
@@ -15,7 +14,7 @@ class SimpleLoginLogic extends LoginLogic {
       throw LoginException();
     }
 
-    return "un token";
+    return "token";
   }
 
   @override
@@ -24,7 +23,7 @@ class SimpleLoginLogic extends LoginLogic {
   }
 }
 
-class FirebaseAuthLogic extends LoginLogic {
+/*class FirebaseAuthLogic extends LoginLogic {
   @override
   Future<String> login(String email, String password) {
     // TODO: implement login
@@ -51,4 +50,4 @@ class MiBackendLogic extends LoginLogic {
     return null;
   }
 
-}
+}*/
